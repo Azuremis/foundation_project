@@ -26,6 +26,8 @@ venv/
 env/
 ENV/
 .env
+.env.*
+!.env.example
 
 # PyTorch Models
 *.pt
@@ -67,6 +69,7 @@ npm-debug.log*
 data/raw/
 data/processed/
 predictions.csv
+backup_*.sql
 
 # Testing
 .coverage
@@ -99,6 +102,9 @@ var/
 .pytest_cache/
 .mypy_cache/
 __pypackages__/ 
+
+# Conda
+.conda/
 
 # Folders
 artifacts/

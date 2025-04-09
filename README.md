@@ -71,21 +71,60 @@ If you want to run the application locally:
 git clone https://github.com/yourusername/foundation_project.git
 cd foundation_project
 
+# Create a .env file with the necessary environment variables
+cp .env.example .env
+# Edit .env with your settings
+nano .env
+
 # Start the application using Docker Compose
 docker-compose up
 ```
 
 Access the application at http://localhost:8501
 
+## Environment Variables
+
+The application uses environment variables for configuration. Create a `.env` file in the root directory with these variables:
+
+```
+# Database credentials
+DB_HOST=db
+DB_NAME=mnistlogs
+DB_USER=mnistuser
+DB_PASSWORD=your_secure_password
+
+# Application settings
+DEBUG=False
+MODEL_PATH=model/saved_model/mnist_model.pth
+
+# Docker settings
+POSTGRES_DB=mnistlogs
+POSTGRES_USER=mnistuser
+POSTGRES_PASSWORD=your_secure_password
+```
+
+For production environments, make sure to:
+1. Use strong, unique passwords
+2. Backup your `.env` file securely
+3. Add `.env` to your `.gitignore` file to prevent committing credentials to version control
+
 ## Repository Structure
 
 ```
 .
 ├── model/              # Model definition and serving
-├── webapp/             # Streamlit application 
-├── database/           # Database initialization and utilities
-├── docker/             # Dockerfiles for each service
+│   └── saved_model/    # Trained model storage
+├── src/                # Source code
+│   ├── app.py          # Main Streamlit application 
+│   ├── hello_app.py    # Simple test application
+│   ├── train_mnist.py  # Model training script
+│   ├── db/             # Database utilities
+│   └── ...
+├── scripts/            # Deployment & automation scripts
+├── tests/              # Unit and integration tests
 ├── docker-compose.yml  # Container orchestration
+├── Dockerfile          # Container definition
+├── .env                # Environment variables (not in git)
 └── README.md           # This documentation
 ```
 
