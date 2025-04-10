@@ -1,0 +1,113 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.env
+.env.*
+!.env.example
+
+# PyTorch Models
+*.pt
+*.pth
+*.onnx
+model/saved_model/*
+!model/saved_model/.gitkeep
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+*.ipynb
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Docker
+docker-compose.override.yml
+.docker/
+docker/data/
+
+# Database
+*.sqlite3
+*.db
+postgres-data/
+pgdata/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Application specific
+.streamlit/secrets.toml
+.streamlit/config.toml
+data/raw/
+data/processed/
+predictions.csv
+backup_*.sql
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+coverage.xml
+*.cover
+
+# Distribution
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Misc
+.cache
+.pytest_cache/
+.mypy_cache/
+__pypackages__/ 
+
+# Virtual Environment
+.conda/
+.venv/
+
+
+
+# Folders
+artifacts/
