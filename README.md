@@ -4,7 +4,7 @@ An interactive web application that allows users to draw digits (0-9) which are 
 
 ## Live Demo
 
-**Access the live application:** [http://your-server-ip-or-domain](http://your-server-ip-or-domain)
+**Access the live application:** [http://49.13.204.139](http://49.13.204.139)
 
 ## Features
 
@@ -80,7 +80,7 @@ nano .env
 docker-compose up
 ```
 
-Access the application at http://localhost:8501
+Access the application at http://localhost:8501 for local development or at http://49.13.204.139:8501 for the deployed version.
 
 ## Environment Variables
 

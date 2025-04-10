@@ -41,14 +41,43 @@ def load_model(model_path=None):
     # Create the model instance based on type
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if model_type == 'cnn':
-        model = SimpleCNN().to(device)
+        model = SimpleCNN()
     else:
-        model = MLP().to(device)
+        model = MLP()
     
     # Load the state dictionary
-    state_dict = torch.load(model_path, map_location=device)
-    model.load_state_dict(state_dict)
+    try:
+        state_dict = torch.load(model_path, map_location=device)
+        model.load_state_dict(state_dict)
+        print(f"Successfully loaded model weights from {model_path}")
+    except Exception as e:
+        print(f"Error loading model weights: {str(e)}")
+        # Try alternative loading method for backwards compatibility
+        try:
+            print("Attempting to load as full model (backwards compatibility)...")
+            full_model = torch.load(model_path, map_location=device, weights_only=False)
+            model = full_model
+            print("Successfully loaded full model")
+        except Exception as e2:
+            print(f"Both loading methods failed. Final error: {str(e2)}")
+            raise
+    
+    # Make sure model is on the correct device and in eval mode
+    model = model.to(device)
     model.eval()
+    
+    # Test the model with a sample input to verify it works
+    print("Testing model with sample input...")
+    try:
+        sample_input = torch.zeros((1, 1, 28, 28), device=device)
+        with torch.no_grad():
+            output = model(sample_input)
+            probs = torch.nn.functional.softmax(output, dim=1)
+            _, predicted = torch.max(probs, 1)
+            print(f"Model test successful, sample prediction: {predicted.item()}")
+    except Exception as e:
+        print(f"Model test failed: {str(e)}")
+        raise
     
     return model
 

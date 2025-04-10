@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 
 # Import custom modules
 from inference import load_model, predict_from_upload, predict_from_canvas, update_prediction_with_user_label
-from db.db_utils import get_prediction_stats
+from db.db_utils import get_prediction_stats, get_prediction_history
 from data_utils import image_to_bytes
 
 # Load environment variables
@@ -200,4 +200,37 @@ if st.session_state.prediction_made:
 
 # Footer
 st.markdown("---")
-st.markdown("Made with ❤️ using Streamlit, PyTorch, and PostgreSQL") 
+st.markdown("Made with ❤️ using Streamlit, PyTorch, and PostgreSQL")
+
+# Add prediction history section
+st.markdown("---")
+st.markdown('<p class="sub-header">Prediction History</p>', unsafe_allow_html=True)
+
+# Fetch prediction history from the database
+history = get_prediction_history(limit=20)
+
+if history:
+    # Create a dataframe for the history
+    history_data = {
+        "Timestamp": [h["timestamp"].strftime("%Y-%m-%d %H:%M:%S") for h in history],
+        "Predicted Digit": [h["predicted_digit"] for h in history],
+        "True Label": [h["user_label"] for h in history],
+        "Confidence": [f"{h['confidence']*100:.2f}%" if h["confidence"] is not None else "N/A" for h in history],
+        "Correct": ["✅" if h["correct"] else "❌" for h in history]
+    }
+    
+    # Display history as a table
+    st.dataframe(
+        history_data,
+        column_config={
+            "Timestamp": st.column_config.DatetimeColumn("Timestamp"),
+            "Predicted Digit": st.column_config.NumberColumn("Predicted Digit"),
+            "True Label": st.column_config.NumberColumn("True Label"),
+            "Confidence": st.column_config.TextColumn("Confidence"),
+            "Correct": st.column_config.TextColumn("Correct")
+        },
+        use_container_width=True,
+        hide_index=True
+    )
+else:
+    st.info("No prediction history found. Make some predictions and provide feedback to build history.") 
