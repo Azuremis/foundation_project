@@ -126,4 +126,47 @@ def get_prediction_stats():
     except Exception as e:
         print(f"Error fetching stats: {e}")
     
-    return stats 
+    return stats
+
+def get_prediction_history(limit=50):
+    """
+    Get prediction history from the database.
+    
+    Args:
+        limit (int): Maximum number of records to return
+        
+    Returns:
+        list: List of dictionaries containing prediction history
+    """
+    history = []
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Get recent predictions with timestamp, prediction, and user label
+        query = """
+            SELECT 
+                timestamp, 
+                predicted_digit, 
+                user_label,
+                confidence,
+                correct
+            FROM predictions
+            WHERE user_label IS NOT NULL
+            ORDER BY timestamp DESC
+            LIMIT %s
+        """
+        cursor.execute(query, (limit,))
+        
+        # Convert results to list of dictionaries
+        columns = ["timestamp", "predicted_digit", "user_label", "confidence", "correct"]
+        for row in cursor.fetchall():
+            history.append(dict(zip(columns, row)))
+            
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        print(f"Error fetching prediction history: {e}")
+    
+    return history 
