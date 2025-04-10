@@ -103,8 +103,11 @@ var/
 .mypy_cache/
 __pypackages__/ 
 
-# Conda
+# Virtual Environment
 .conda/
+.venv/
+
+
 
 # Folders
 artifacts/
