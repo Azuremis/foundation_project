@@ -107,6 +107,9 @@ def validate(model, device, test_loader, criterion):
     return test_loss, accuracy
 
 def main():
+    # Set debug mode at the beginning of the function
+    global DEBUG
+    
     parser = argparse.ArgumentParser(description='MNIST Training Script')
     parser.add_argument('--model-type', type=str, choices=['cnn', 'mlp'], default='cnn',
                         help='Type of model to train (cnn or mlp)')
@@ -132,8 +135,7 @@ def main():
     
     args = parser.parse_args()
     
-    # Set debug mode
-    global DEBUG
+    # Set debug mode based on command line arguments
     DEBUG = args.debug
     
     # Set the random seed for reproducibility
