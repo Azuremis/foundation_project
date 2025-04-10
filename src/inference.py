@@ -6,6 +6,7 @@ import torch
 from data_utils import preprocess_image, preprocess_drawn_image
 from db.db_utils import log_prediction
 from dotenv import load_dotenv
+from model_architecture import SimpleCNN, MLP
 
 # Load environment variables
 load_dotenv()
@@ -27,9 +28,28 @@ def load_model(model_path=None):
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Model file not found at {model_path}")
     
+    # Determine model type
+    model_dir = os.path.dirname(model_path)
+    model_info_path = os.path.join(model_dir, 'model_info.txt')
+    
+    # Default to CNN if model info not available
+    model_type = 'cnn'
+    if os.path.exists(model_info_path):
+        with open(model_info_path, 'r') as f:
+            model_type = f.read().strip()
+    
+    # Create the model instance based on type
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = torch.load(model_path, map_location=device)
+    if model_type == 'cnn':
+        model = SimpleCNN().to(device)
+    else:
+        model = MLP().to(device)
+    
+    # Load the state dictionary
+    state_dict = torch.load(model_path, map_location=device)
+    model.load_state_dict(state_dict)
     model.eval()
+    
     return model
 
 def predict_from_upload(model, image_file, save_to_db=True):

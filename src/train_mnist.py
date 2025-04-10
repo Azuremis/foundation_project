@@ -185,9 +185,16 @@ def main():
             # Ensure directory exists
             os.makedirs(args.output_dir, exist_ok=True)
             
-            # Save model
-            torch.save(model, os.path.join(args.output_dir, 'mnist_model.pth'))
-            print(f'Model saved with accuracy: {accuracy:.2f}%')
+            # Save model state dictionary instead of the whole model
+            model_path = os.path.join(args.output_dir, 'mnist_model.pth')
+            torch.save(model.state_dict(), model_path)
+            print(f'Model state dictionary saved with accuracy: {accuracy:.2f}%')
+            
+            # Save model type info for loading
+            model_info_path = os.path.join(args.output_dir, 'model_info.txt')
+            with open(model_info_path, 'w') as f:
+                f.write(args.model_type)
+            print(f'Model type info saved to {model_info_path}')
     
     print("Training completed!")
     print(f"Best test accuracy: {best_accuracy:.2f}%")
