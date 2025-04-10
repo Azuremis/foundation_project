@@ -39,6 +39,22 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+    
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: mnist_pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@mnist.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - db
+    restart: unless-stopped
 
 volumes:
-  pgdata: 
+  pgdata:
+  pgadmin_data:
