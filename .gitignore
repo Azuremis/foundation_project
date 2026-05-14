@@ -66,6 +66,7 @@ npm-debug.log*
 # Application specific
 .streamlit/secrets.toml
 .streamlit/config.toml
+data/
 data/raw/
 data/processed/
 predictions.csv

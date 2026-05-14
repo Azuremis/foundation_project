@@ -17,7 +17,7 @@ sudo apt-get install -y git docker.io docker-compose
 
 # Add current user to the docker group
 echo "Adding user to docker group..."
-sudo usermod -aG docker $USER
+sudo usermod -aG docker "$USER"
 echo "NOTE: You may need to log out and back in for docker group changes to take effect."
 
 # Check Docker and Docker Compose versions
@@ -30,7 +30,7 @@ docker-compose --version
 if [ ! -d "mnist_project" ]; then
   echo "Cloning the repository..."
   read -p "Enter the GitHub repository URL: " REPO_URL
-  git clone $REPO_URL mnist_project
+  git clone "$REPO_URL" mnist_project
   cd mnist_project
 else
   echo "Repository already exists. Pulling latest changes..."
@@ -47,6 +47,7 @@ if [ ! -f ".env" ]; then
   echo "Creating .env file..."
   # Generate random password for database
   DB_PASSWORD=$(openssl rand -base64 12)
+  PGADMIN_PASSWORD=$(openssl rand -base64 18)
   
   cat > .env << EOF
 # Database credentials
@@ -63,7 +64,12 @@ MODEL_PATH=model/saved_model/mnist_model.pth
 POSTGRES_DB=mnistlogs
 POSTGRES_USER=mnistuser
 POSTGRES_PASSWORD=${DB_PASSWORD}
+
+# pgAdmin settings
+PGADMIN_DEFAULT_EMAIL=admin@mnist.local
+PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
 EOF
+  chmod 600 .env
   
   echo ".env file created with secure random password!"
   echo "⚠️ Make sure to backup your .env file in a secure location."
@@ -81,4 +87,4 @@ echo "Checking container status..."
 docker-compose ps
 
 echo "Setup complete! The application should be running at http://$(hostname -I | awk '{print $1}')/"
-echo "You can check the logs with: docker-compose logs -f" 
+echo "You can check the logs with: docker-compose logs -f"

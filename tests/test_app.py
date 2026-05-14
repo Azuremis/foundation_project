@@ -62,9 +62,11 @@ class TestDataUtils(unittest.TestCase):
     
     def test_tensor_to_image(self):
         """Test tensor to image conversion."""
-        # Create a normalized test tensor (simulating MNIST)
-        test_tensor = torch.zeros(1, 28, 28)
-        test_tensor[:, 10:20, 10:20] = 1.0  # Set a square to 1.0 (white after denormalization)
+        # Create a normalized test tensor with known black/white pixel values.
+        black = (0.0 - 0.1307) / 0.3081
+        white = (1.0 - 0.1307) / 0.3081
+        test_tensor = torch.full((1, 28, 28), black)
+        test_tensor[:, 10:20, 10:20] = white
         
         # Convert to image
         img = tensor_to_image(test_tensor)
@@ -77,4 +79,4 @@ class TestDataUtils(unittest.TestCase):
         self.assertTrue(img_array[5, 5] < 50)     # Should be close to black
 
 if __name__ == '__main__':
-    unittest.main() 
+    unittest.main()

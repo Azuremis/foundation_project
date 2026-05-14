@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
@@ -35,10 +35,10 @@ ENV DEBUG=False
 ENV DB_HOST=localhost
 ENV DB_NAME=mnistlogs
 ENV DB_USER=mnistuser 
-ENV DB_PASSWORD=changeme
+ENV DB_PASSWORD=
 
 # Expose Streamlit port
 EXPOSE 8501
 
 # Command to run the app
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.enableCORS=false"] 
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.enableCORS=false"]

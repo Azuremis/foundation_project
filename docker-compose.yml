@@ -10,8 +10,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    # Postgres is intentionally not published on the host; web reaches it over the Docker network.
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
@@ -26,7 +25,7 @@ services:
       dockerfile: Dockerfile
     container_name: mnist_web
     ports:
-      - "80:8501"  # Exposes Streamlit on port 80
+      - "127.0.0.1:8501:8501"  # Legacy Streamlit app is localhost-only; use SSH tunneling.
     environment:
       - DB_HOST=${DB_HOST}
       - DB_NAME=${DB_NAME}
@@ -44,11 +43,11 @@ services:
     image: dpage/pgadmin4
     container_name: mnist_pgadmin
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@mnist.com
-      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
       - PGADMIN_CONFIG_SERVER_MODE=False
     ports:
-      - "5050:80"
+      - "127.0.0.1:5050:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:

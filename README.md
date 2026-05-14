@@ -2,9 +2,15 @@
 
 An interactive web application that allows users to draw digits (0-9) which are then classified using a PyTorch model trained on the MNIST dataset. The application records all predictions in a PostgreSQL database for performance tracking.
 
-## Live Demo
+## Access
 
-**Access the live application:** [http://49.13.204.139](http://49.13.204.139)
+The VPS deployment is intentionally bound to localhost. Access it through an SSH tunnel:
+
+```bash
+ssh -L 8501:127.0.0.1:8501 pta-woo-dev
+```
+
+Then open http://127.0.0.1:8501 locally.
 
 ## Features
 
@@ -58,8 +64,8 @@ The PostgreSQL database stores the following information for each prediction:
 
 - **Model**: Convolutional Neural Network trained on MNIST dataset
 - **Web Interface**: Streamlit with custom JavaScript for canvas drawing
-- **API**: FastAPI endpoint for model inference
-- **Database**: PostgreSQL with connection pooling
+- **Inference**: Streamlit calls the local PyTorch model directly
+- **Database**: PostgreSQL for prediction and feedback records
 - **Deployment**: Containerized with Docker on Hetzner VPS
 
 ## Local Development
@@ -80,7 +86,7 @@ nano .env
 docker-compose up
 ```
 
-Access the application at http://localhost:8501 for local development or at http://49.13.204.139:8501 for the deployed version.
+Access the application at http://localhost:8501 for local development. For the VPS deployment, use the SSH tunnel shown above.
 
 ## Environment Variables
 
@@ -101,6 +107,10 @@ MODEL_PATH=model/saved_model/mnist_model.pth
 POSTGRES_DB=mnistlogs
 POSTGRES_USER=mnistuser
 POSTGRES_PASSWORD=your_secure_password
+
+# pgAdmin settings
+PGADMIN_DEFAULT_EMAIL=admin@mnist.local
+PGADMIN_DEFAULT_PASSWORD=your_secure_pgadmin_password
 ```
 
 For production environments, make sure to:
@@ -130,10 +140,9 @@ For production environments, make sure to:
 
 ## About the Model
 
-The model architecture is a convolutional neural network with:
+The default model architecture is a convolutional neural network with:
 - 2 convolutional layers (32 and 64 filters)
 - Max pooling layers
-- Dropout for regularization
 - 2 fully connected layers
 
 Training metrics:

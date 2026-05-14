@@ -13,10 +13,18 @@ if [ ! -f "docker-compose.yml" ]; then
   exit 1
 fi
 
+# Load deployment settings
+if [ -f ".env" ]; then
+  set -a
+  # shellcheck disable=SC1091
+  . ./.env
+  set +a
+fi
+
 # Backup database
 echo "Creating database backup..."
 BACKUP_FILE="backup_$(date +%Y-%m-%d_%H-%M-%S).sql"
-docker exec -t mnist_db pg_dump -U mnistuser mnistlogs > $BACKUP_FILE
+docker exec -t mnist_db pg_dump -U "${POSTGRES_USER:-mnistuser}" "${POSTGRES_DB:-mnistlogs}" > "$BACKUP_FILE"
 echo "Database backed up to $BACKUP_FILE"
 
 # Pull latest changes
@@ -34,4 +42,4 @@ echo "Checking container status..."
 docker-compose ps
 
 echo "Deployment complete! The updated application should be running."
-echo "You can check the logs with: docker-compose logs -f" 
+echo "You can check the logs with: docker-compose logs -f"

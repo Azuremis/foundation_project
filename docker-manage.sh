@@ -43,20 +43,20 @@ function is_valid_service {
 case "$1" in
     start-all)
         echo "Starting all services..."
-        docker-compose -f $COMPOSE_FILE up -d
+        docker-compose -f "$COMPOSE_FILE" up -d
         ;;
     stop-all)
         echo "Stopping all services..."
-        docker-compose -f $COMPOSE_FILE down
+        docker-compose -f "$COMPOSE_FILE" down
         ;;
     restart-all)
         echo "Restarting all services..."
-        docker-compose -f $COMPOSE_FILE down
-        docker-compose -f $COMPOSE_FILE up -d
+        docker-compose -f "$COMPOSE_FILE" down
+        docker-compose -f "$COMPOSE_FILE" up -d
         ;;
     status)
         echo "Services status:"
-        docker-compose -f $COMPOSE_FILE ps
+        docker-compose -f "$COMPOSE_FILE" ps
         ;;
     start)
         if [[ -z "$2" ]]; then
@@ -70,7 +70,7 @@ case "$1" in
         fi
         
         echo "Starting service: $2"
-        docker-compose -f $COMPOSE_FILE up -d "$2"
+        docker-compose -f "$COMPOSE_FILE" up -d "$2"
         ;;
     stop)
         if [[ -z "$2" ]]; then
@@ -84,7 +84,7 @@ case "$1" in
         fi
         
         echo "Stopping service: $2"
-        docker-compose -f $COMPOSE_FILE stop "$2"
+        docker-compose -f "$COMPOSE_FILE" stop "$2"
         ;;
     restart)
         if [[ -z "$2" ]]; then
@@ -98,11 +98,11 @@ case "$1" in
         fi
         
         echo "Restarting service: $2"
-        docker-compose -f $COMPOSE_FILE restart "$2"
+        docker-compose -f "$COMPOSE_FILE" restart "$2"
         ;;
     *)
         show_usage
         ;;
 esac
 
-echo "Done!" 
+echo "Done!"
